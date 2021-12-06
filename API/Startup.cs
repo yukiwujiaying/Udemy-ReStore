@@ -37,6 +37,7 @@ namespace API
             services.AddDbContext<StoreContext>(o=>{
                 o.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +53,14 @@ namespace API
             //app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            //configuration for API and client runing in different localhost
+            app.UseCors(opt => 
+            {
+                //Methoos is GET,POST,PUT,DELETE
+                //inside origin is the react application host
+                opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3002");
+            });
 
             app.UseAuthorization();
 
