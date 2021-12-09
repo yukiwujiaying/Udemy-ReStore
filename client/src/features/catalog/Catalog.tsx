@@ -1,16 +1,25 @@
 import { useEffect, useState } from "react";
+import agent from "../../app/api/agent";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 import { Product } from "../../app/layout/models/product";
 import ProductList from "./ProductList";
 
 
 export default function Catalog() {
     const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] =  useState(true);
 
     useEffect(()=>{
-      fetch('http://localhost:5000/api/products')
-      .then(response=>response.json())
-      .then(data=>setProducts(data))},
-      [])
+        agent.Catalog.list()
+            .then(products=> setProducts(products))
+            .catch(error =>console.log(error))
+            .finally(()=>setLoading(false))
+    },[])
+    // useEffect(()=>{
+    //   fetch('http://localhost:5000/api/products')
+    //   .then(response=>response.json())
+    //   .then(data=>setProducts(data))},
+    //   [])
       //the first parameter is a call back function "fetch...)"
       //[] is the dependency if we donot have this it will run every time the component render
       //[] means this is only going to be called once 
@@ -29,6 +38,7 @@ export default function Catalog() {
     //       pictureUrl: 'http://picsum.photo/200'
     //     }])
     // }
+    if (loading) return <LoadingComponent message="Loading products..." />
     return (
         <>
             <ProductList products={products}/>
