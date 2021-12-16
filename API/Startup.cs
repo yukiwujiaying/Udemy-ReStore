@@ -63,7 +63,7 @@ namespace API
             {
                 //Methoos is GET,POST,PUT,DELETE
                 //inside origin is the react application host
-                opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3002");
+                opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3002");
             });
 
             app.UseAuthorization();

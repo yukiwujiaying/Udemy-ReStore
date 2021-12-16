@@ -1,7 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { createBrowserHistory } from "history";
 import { myHistory } from "../../history";
 
 
@@ -9,6 +7,7 @@ import { myHistory } from "../../history";
 const sleep = () => new Promise(resolve => setTimeout(resolve,500));
 
 axios.defaults.baseURL = 'http://localhost:5000/api/';
+axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data
 
@@ -68,10 +67,21 @@ const TestErrors ={
     get500Error:()=>request.get('buggy/server-error'),
     getValidationError:()=>request.get('buggy/validation-error'),
 }
+const Basket = {
+    //cookie will setup automatically so do not need to do anything special for cookie to go up to api
+    //so no parameter needed in get:()
+    get:() => request.get('basket'),
+    //need an empty object{} at the end as this is a post request
+    //even though we are not sending and  data in the body as we are using queries string, we still need an empty object to go with this request
+    addItem:(productId: number, quantity= 1)=> request.post(`basket?productId=${productId}&quantity=${quantity}`,{}),
+    removeItem:(productId: number, quantity= 1)=> request.delete(`basket?productId=${productId}&quantity=${quantity}`)
+
+}
 
 const agent = {
     Catalog,
-    TestErrors
+    TestErrors,
+    Basket
 }
 
 export default agent;

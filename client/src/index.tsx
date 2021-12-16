@@ -5,13 +5,16 @@ import App from './app/layout/App';
 import reportWebVitals from './reportWebVitals';
 import { HistoryRouter } from "./HistoryRouter"
 import { myHistory } from './history';
+import { StoreProvider } from './app/context/StoreContext';
 
 
 
   
 ReactDOM.render(
   <HistoryRouter history={myHistory}>
+    <StoreProvider>
       <App />
+    </StoreProvider>
   </HistoryRouter>,
   document.getElementById("root")
 )
